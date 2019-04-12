@@ -46,8 +46,8 @@ CGEventRef myCGEventCallback(CGEventTapProxy __unused proxy, CGEventType type, C
         return event;
     }
 
-    if (type == kCGEventLeftMouseDown
-            || type == kCGEventRightMouseDown) {
+    if (/*type == kCGEventLeftMouseDown
+            || */type == kCGEventRightMouseDown) {
         CGPoint mouseLocation = CGEventGetLocation(event);
         [moveResize setTracking:CACurrentMediaTime()];
 
@@ -90,27 +90,27 @@ CGEventRef myCGEventCallback(CGEventTapProxy __unused proxy, CGEventType type, C
         if (_clickedWindow != nil) CFRelease(_clickedWindow);
     }
 
-    if (type == kCGEventLeftMouseDragged
-            && [moveResize tracking] > 0) {
-        AXUIElementRef _clickedWindow = [moveResize window];
-        double deltaX = CGEventGetDoubleValueField(event, kCGMouseEventDeltaX);
-        double deltaY = CGEventGetDoubleValueField(event, kCGMouseEventDeltaY);
-
-        NSPoint cTopLeft = [moveResize wndPosition];
-        NSPoint thePoint;
-        thePoint.x = cTopLeft.x + deltaX;
-        thePoint.y = cTopLeft.y + deltaY;
-        [moveResize setWndPosition:thePoint];
-        CFTypeRef _position;
-
-        // actually applying the change is expensive, so only do it every kMoveFilterInterval seconds
-        if (CACurrentMediaTime() - [moveResize tracking] > kMoveFilterInterval) {
-            _position = (CFTypeRef) (AXValueCreate(kAXValueCGPointType, (const void *) &thePoint));
-            AXUIElementSetAttributeValue(_clickedWindow, (__bridge CFStringRef) NSAccessibilityPositionAttribute, (CFTypeRef *) _position);
-            if (_position != NULL) CFRelease(_position);
-            [moveResize setTracking:CACurrentMediaTime()];
-        }
-    }
+//    if (type == kCGEventLeftMouseDragged
+//            && [moveResize tracking] > 0) {
+//        AXUIElementRef _clickedWindow = [moveResize window];
+//        double deltaX = CGEventGetDoubleValueField(event, kCGMouseEventDeltaX);
+//        double deltaY = CGEventGetDoubleValueField(event, kCGMouseEventDeltaY);
+//
+//        NSPoint cTopLeft = [moveResize wndPosition];
+//        NSPoint thePoint;
+//        thePoint.x = cTopLeft.x + deltaX;
+//        thePoint.y = cTopLeft.y + deltaY;
+//        [moveResize setWndPosition:thePoint];
+//        CFTypeRef _position;
+//
+//        // actually applying the change is expensive, so only do it every kMoveFilterInterval seconds
+//        if (CACurrentMediaTime() - [moveResize tracking] > kMoveFilterInterval) {
+//            _position = (CFTypeRef) (AXValueCreate(kAXValueCGPointType, (const void *) &thePoint));
+//            AXUIElementSetAttributeValue(_clickedWindow, (__bridge CFStringRef) NSAccessibilityPositionAttribute, (CFTypeRef *) _position);
+//            if (_position != NULL) CFRelease(_position);
+//            [moveResize setTracking:CACurrentMediaTime()];
+//        }
+//    }
 
     if (type == kCGEventRightMouseDown) {
         AXUIElementRef _clickedWindow = [moveResize window];
@@ -215,8 +215,8 @@ CGEventRef myCGEventCallback(CGEventTapProxy __unused proxy, CGEventType type, C
         }
     }
 
-    if (type == kCGEventLeftMouseUp
-            || type == kCGEventRightMouseUp) {
+    if (/*type == kCGEventLeftMouseUp
+            || */type == kCGEventRightMouseUp) {
         [moveResize setTracking:0];
     }
 
@@ -250,11 +250,11 @@ CGEventRef myCGEventCallback(CGEventTapProxy __unused proxy, CGEventType type, C
 
     CFRunLoopSourceRef runLoopSource;
 
-    CGEventMask eventMask = CGEventMaskBit( kCGEventLeftMouseDown )
+    CGEventMask eventMask = /*CGEventMaskBit( kCGEventLeftMouseDown )
                     | CGEventMaskBit( kCGEventLeftMouseDragged )
-                    | CGEventMaskBit( kCGEventRightMouseDown )
+                    | */CGEventMaskBit( kCGEventRightMouseDown )
                     | CGEventMaskBit( kCGEventRightMouseDragged )
-                    | CGEventMaskBit( kCGEventLeftMouseUp )
+                    /*| CGEventMaskBit( kCGEventLeftMouseUp )*/
                     | CGEventMaskBit( kCGEventRightMouseUp )
     ;
 
